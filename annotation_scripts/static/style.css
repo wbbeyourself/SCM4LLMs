@@ -1,0 +1,41 @@
+.form-container {
+    width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f2f2f2;
+}
+
+h1 {
+    text-align: center;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+.form-container label {
+    display: inline-block;
+    text-align: left;
+    width: 100px;
+}
+
+.form-container textarea {
+    display: inline-block;
+    margin-left: 20px;
+    text-align: left;
+}
+
+
+#mode {
+    width: 200px; /*改变宽度的值*/
+}
+
+select {
+    text-align: center; /*设置文字居中*/
+  }

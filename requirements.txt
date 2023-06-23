@@ -1,0 +1,8 @@
+openai>=0.27.0
+chardet
+numpy
+tiktoken
+langdetect
+torch
+flask
+gradio>=3.27.0

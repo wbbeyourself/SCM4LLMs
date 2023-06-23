@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Annotation Form</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h1>简易标注界面</h1>
+        {% if error_msg %}
+            <p class="error">{{ error_msg }}</p>
+        {% endif %}
+        {% if success_msg %}
+            <p class="success">{{ success_msg }}</p>
+        {% endif %}
+        <form method="POST">
+            <label>id</label>
+            <textarea name="ID" placeholder="请输入ID" style="height: 50px; width: 700px;"></textarea><br>
+
+            <label>question</label>
+            <textarea name="Question" placeholder="请输入Question" style="height: 50px; width: 700px;"></textarea><br>
+
+            <label>answer</label>
+            <textarea name="Answer" placeholder="请输入Answer" style="height: 150px; width: 700px;"></textarea><br>
+
+            <label for="mode">模式：</label>
+            <select id="mode" name="Mode">
+                <option value="independent">独立问题</option>
+                <option value="single-turn">单轮问题</option>
+                <option value="single-turn-reasoning">单轮+推理问题</option>
+                <option value="multi-turn">多轮问题</option>
+            </select><br>
+
+            <div style="text-align: center;">
+                <button type="submit" style="font-size: 1.2em; background-color: #008CBA; color: #fff; padding: 10px 20px; border: none; border-radius: 5px;">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+.vscode/
+__pycache__/
+.ipynb_checkpoints/
+flagged/
+evaluation_data/
+notebook/
+logs/
+history/
+deprecated_files/
+statistics/
+test.py
+api_config.json
+apikey.txt
+.key.index
+log.txt
+tmp.txt
+.DS_Store

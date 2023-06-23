@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data</title>
+    <style>
+        body {
+            margin: 30px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        table {
+            margin-bottom: 30px;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+        }
+
+        td:first-child {
+            font-weight: bold;
+        }
+
+        td:last-child {
+            color: #999;
+        }
+
+        input[type=number] {
+            width: 70px;
+        }
+
+        button {
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        a {
+            font-size: 16px;
+            margin-right: 20px;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .grey {
+            color: grey;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td>ID:</td>
+                <td>{{ id }}</td>
+            </tr>
+            <tr>
+                <td>Question:</td>
+                <td>{{ question|safe }}</td>
+            </tr>
+            <tr>
+                <td>Gold Answer:</td>
+                <td>{{ answer|safe }}</td>
+            </tr>
+            <tr>
+                <td>Mode:</td>
+                <td>{{ mode }}</td>
+            </tr>
+            <tr>
+                <td>Turbo Answer:</td>
+                <td>{{ turbo_answer|safe }}</td>
+            </tr>
+            <tr>
+                <td>Davinci Answer:</td>
+                <td>{{ davinci_answer|safe }}</td>
+            </tr>
+            <tr>
+                <td>Annotated:</td>
+                <td style="color: {{ 'green' if annotated else 'grey' }}">{{ '已标注' if annotated else '未标注' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <form action="/save" method="post">
+        <input type="radio" name="comparison_result" value="turbo" checked> Turbo
+        <input type="radio" name="comparison_result" value="davinci"> Davinci
+        <input type="radio" name="comparison_result" value="equal"> Equal
+        <input type="radio" name="comparison_result" value="both_wrong"> Both Wrong
+        <br>
+        <select name="turbo_correct">
+            <option value="true">Turbo Correct</option>
+            <option value="partially_true">Turbo Partially Correct</option>
+            <option value="false">Turbo Incorrect</option>
+        </select>
+        <select name="davinci_correct">
+            <option value="true">Davinci Correct</option>
+            <option value="partially_true">Davinci Partially Correct</option>
+            <option value="false">Davinci Incorrect</option>
+        </select>
+
+        <input type="submit" value="保存">
+    </form>
+
+    <a href="/prev">上一页</a>
+    <a href="/next">下一页</a>
+
+    <p>跳转到第 <input type="number" name="page_num" value="{{ index + 1 }}" min="1" max="{{ max_page }}"> 页，共 {{ max_page }} 页 <button onclick="jumpToPage()">GO</button></p>
+    <script>
+        function jumpToPage() {
+            var page_num = parseInt(document.getElementsByName('page_num')[0].value);
+            if (isNaN(page_num) || page_num < 1 || page_num > {{ max_page }}) {
+                alert("请输入正确的页码！");
+                return false;
+            }
+            else {
+                window.location.href = "/goto?page=" + page_num;
+                return true;
+            }
+        }
+    </script>
+</body>
+</html>
