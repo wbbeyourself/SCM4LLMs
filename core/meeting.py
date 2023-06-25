@@ -139,11 +139,11 @@ class SummaryBot(object):
         
         if suffix:
             suffix = f"-{suffix}"
-        json_filename = f'history/summary-{meeting_id}-{self.model_name}{suffix}.json'
-        txt_filename = f'history/summary-{meeting_id}-{self.model_name}{suffix}.txt'
+        json_filename = f'history/meeting-sum/meeting-summary-{meeting_id}-{self.model_name}{suffix}.json'
+        txt_filename = f'history/meeting-sum/meeting-summary-{meeting_id}-{self.model_name}{suffix}.txt'
         makedirs(json_filename)
         save_json_file(json_filename, hist_lst)
-        save_file(txt_filename, hist_txt_lst)
+        # save_file(txt_filename, hist_txt_lst)
     
 
     def ask(self, prompt) -> str:

@@ -82,7 +82,8 @@ def summarize_book(book_file, model_name, scm=True):
         else:
             concat_input = get_paragragh_prompt(text)
         
-        logger.info(f'\n--------------\n[第{i+1}轮] model_name:{model_name};  USE SCM: {scm} \n\nconcat_input:\n\n{concat_input}\n--------------\n')
+        logger.info(f'\n--------------\n[第{i+1}/{total}轮] book_file: {book_file}  model_name:{model_name};  USE SCM: {scm} \n\nconcat_input:\n\n{concat_input}\n--------------\n')
+        print(f'\n--------------\n[第{i+1}/{total}轮] book_file: {book_file} model_name:{model_name};  USE SCM: {scm}\n--------------\n')
 
         summary: str = bot.ask(concat_input).strip()
         logger.info(f"model_name:{model_name}; USE SCM: {scm}; Summary:\n\n{summary}\n\n")
@@ -152,10 +153,5 @@ if __name__ == '__main__':
     for book_file in book_list:
         book_name = os.path.basename(book_file)
         logger.info(f'\n\n※※※ Begin Summarize Book : {book_name} ※※※\n\n')
-        try:
-            summarize_book(book_file, model_name, scm=USE_SCM)
-        except Exception as e:
-            logger.info(f"☆☆☆☆☆ ERROR: model_name {model_name}; book_file {book_file}; e: {e} ☆☆☆☆☆")
-            continue
-    
+        summarize_book(book_file, model_name, scm=USE_SCM)
     KEY_MANAGER.remove_deprecated_keys()

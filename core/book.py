@@ -85,11 +85,11 @@ class SummaryBot(object):
         basename = os.path.basename(book_file)
         if suffix:
             suffix = f"-{suffix}"
-        json_filename = f'history/summary-{basename}-{self.model_name}{suffix}.json'
-        txt_filename = f'history/summary-{basename}-{self.model_name}{suffix}.txt'
+        json_filename = f'history/book-sum/book-summary-{basename}-{self.model_name}{suffix}.json'
+        txt_filename = f'history/book-sum/book-summary-{basename}-{self.model_name}{suffix}.txt'
         makedirs(json_filename)
         save_json_file(json_filename, hist_lst)
-        save_file(txt_filename, hist_txt_lst)
+        # save_file(txt_filename, hist_txt_lst)
     
 
     def ask(self, prompt) -> str:
@@ -176,6 +176,7 @@ class SummaryBot(object):
             summary = self._summarize_paragraphs(text, max_tokens=tgt_tokens)
             group_summaries.append(summary)
             LOCAL_CHAT_LOGGER.info(f"\n\ndepth:{depth}; processing: {i+1}/{total_groups}...\n\n")
+            print(f"\n\ndepth:{depth}; processing: {i+1}/{total_groups}...\n\n")
 
 
         self.depth_summary_dict[f"depth={depth};count={len(group_summaries)}"] = group_summaries

@@ -74,8 +74,9 @@ class ChatBot(object):
         hist_txt_lst = [one.to_plain_text() for one in self.history]
         txt_prefix = keep_only_alnum_chinese(hist_lst[0]["user"][:10])
 
-        json_filename = f'history/{txt_prefix}-{self.model_name}.json'
-        txt_filename = f'history/{txt_prefix}-{self.model_name}.txt'
+        json_filename = f'history/dialogue/{txt_prefix}-{self.model_name}.json'
+        txt_filename = f'history/dialogue/{txt_prefix}-{self.model_name}.txt'
+        makedirs(json_filename)
         save_json_file(json_filename, hist_lst)
         save_file(txt_filename, hist_txt_lst)
     
