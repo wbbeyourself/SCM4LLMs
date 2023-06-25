@@ -88,7 +88,7 @@ Take the blockchain meeting as example, whose content cost 37k tokens, as a demo
 python meeting_summary.py --meeting_ids 26231372_区块链技术的应用前景
 ```
 
-## Evaluation Dataset
+# 📝 Evaluation Dataset
 
 Data files are in `data` folder.
 
@@ -102,7 +102,7 @@ Data files are in `data` folder.
 
 Evaluation dataset statistics. 2M means 2 miillion token count.
 
-## Evaluation Results
+# 📊 Evaluation Results
 
 - [Chinese Long-term Dialogue QA results](results/markdown_results/long_term_dialogue_zh.md)
 - [English Long-term Dialogue QA results](results/markdown_results/long_term_dialogue_en.md)
@@ -112,7 +112,7 @@ Evaluation dataset statistics. 2M means 2 miillion token count.
 More running records and summary details are zipped to `history.zip`. You can download it from [Google Drive Link](https://drive.google.com/file/d/1iPsZnClj170W5vZyrFADoVZoXICb1ELo/view?usp=sharing) and [Baidu Netdisk](https://pan.baidu.com/s/1TPdTP7LBJZAopxckyIfb8A?pwd=yqwa).
 `call_embedding_history.json` and `call_func_history.json` store the openai cache log and are zipped in `logs.zip`. You can download it from [Google Drive Link](https://drive.google.com/file/d/17Tx294kixfgFfAkB0Z98q1M_aT5OOZEU/view?usp=sharing) and [Baidu Netdisk](https://pan.baidu.com/s/1yo2p_m-aRbTd5hIyNTlL4Q?pwd=ka6j).
 
-## Limitations & Risks
+## ⚠️ Limitations & Risks
 
 > we will assess the efficacy of our system on more open-source models that possess single-turn instruction comprehension capability.
 
