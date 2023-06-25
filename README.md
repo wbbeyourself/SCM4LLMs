@@ -8,7 +8,7 @@ Our SCM system is composed of three key modules: the language model agent, the m
 # 🔥 Updates
 - [**2023-4-26**] We released our first version [paper](https://arxiv.org/abs/2304.13343), [codes](https://github.com/wbbeyourself/SCM4LLMs). Check it out!
 
-# 🏴󠁶󠁵󠁭󠁡󠁰󠁿 Overview
+# 🌟 Overview
 
 Our SCM system can be integrated with any LLMs to enable them to process ultra-long texts without any modification or fine-tuning. 
 
@@ -109,6 +109,8 @@ Evaluation dataset statistics. 2M means 2 miillion token count.
 - [Book Summarization results](results/markdown_results/book_summary.md)
 - [Meeting Summarization Results](results/markdown_results/meeting_summary_zh.md)
 
+More running records and summary details are zipped to `history.zip`. You can download it from [Google Drive Link](https://drive.google.com/file/d/1iPsZnClj170W5vZyrFADoVZoXICb1ELo/view?usp=sharing) and [Baidu Netdisk](https://pan.baidu.com/s/1TPdTP7LBJZAopxckyIfb8A?pwd=yqwa).
+`call_embedding_history.json` and `call_func_history.json` store the openai cache log and are zipped in `logs.zip`. You can download it from [Google Drive Link](https://drive.google.com/file/d/17Tx294kixfgFfAkB0Z98q1M_aT5OOZEU/view?usp=sharing) and [Baidu Netdisk](https://pan.baidu.com/s/1yo2p_m-aRbTd5hIyNTlL4Q?pwd=ka6j).
 
 ## Limitations & Risks
 
