@@ -201,7 +201,7 @@ def call_text_davinci_003(prompt, apikey=None, verbo=True):
 
     api_model_index = ENGINE_DAVINCI_003
     response = openai.Completion.create(
-            engine=ENGINE_DAVINCI_003,
+            model=ENGINE_DAVINCI_003,
             prompt=prompt,
             temperature=0.5,
             max_tokens=max_tokens,

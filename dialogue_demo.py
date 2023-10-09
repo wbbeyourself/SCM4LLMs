@@ -1,4 +1,4 @@
-import os
+from env import *
 import sys
 import argparse
 from os.path import join
