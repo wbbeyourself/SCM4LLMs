@@ -8,7 +8,7 @@ from os.path import join
 from copy import deepcopy
 from collections import OrderedDict
 
-root = 'C:/Users/beyourself/Desktop/cache_center'
+root = 'C:/Users/xxx/Desktop/cache_center'
 
 def merge_text_cache(files):
     global root
