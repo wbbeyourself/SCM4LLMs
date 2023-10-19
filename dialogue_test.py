@@ -17,11 +17,13 @@ bot: ChatBot = None
 # Global Hyper Parameters
 no_long_term_memory = False
 naive_memory = False
+embed_summary = False
 
 translation_map = {}
 
 
 def summarize_embed_one_turn(bot: ChatBot, dialogue_text, dialogue_text_with_index):
+    global embed_summary
     lang2template = {
         LANG_EN: en_turn_summarization_prompt,
         LANG_ZH: zh_turn_summarization_prompt
@@ -38,7 +40,10 @@ def summarize_embed_one_turn(bot: ChatBot, dialogue_text, dialogue_text_with_ind
         logger.info(f'Summarization is:\n\n{summarization}\n\n')
     else:
         logger.info(f'Raw content is short, keep raw content as summarization:\n\n{summarization}\n\n')
-    embedding = bot.vectorize(dialogue_text_with_index)
+    if embed_summary:
+        embedding = bot.vectorize(summarization)
+    else:
+        embedding = bot.vectorize(dialogue_text_with_index)
     return summarization, embedding
 
 
@@ -264,6 +269,8 @@ if __name__ == '__main__':
     parser.add_argument("--translation_file", type=str, default=None)
     parser.add_argument("--no_long_term_memory", action='store_true', help='do not use long-term memory, default False')
     parser.add_argument("--naive_memory", action='store_true', help='naive concat topk memory and concate history')
+    parser.add_argument("--embed_summary", action='store_true', help='use summary embedding for each turn')
+    # embed_summary
     parser.add_argument("--similar_top_k", type=int, default=6)
     args = parser.parse_args()
 
@@ -303,6 +310,7 @@ if __name__ == '__main__':
     # whether use scm for history memory
     no_long_term_memory = True if args.no_long_term_memory else False
     naive_memory = True if args.naive_memory else False
+    embed_summary = True if args.embed_summary else False
 
     with gr.Blocks() as demo:
         gr.Markdown(f"<h1><center>Long Dialogue Chatbot ({args.model_name}) for test</center></h1>")
