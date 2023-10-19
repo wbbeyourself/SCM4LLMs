@@ -14,6 +14,9 @@ from prompts.dialogue import *
 args: argparse.Namespace = None
 bot: ChatBot = None
 
+# Global Hyper Parameters
+no_long_term_memory = False
+
 translation_map = {}
 
 
@@ -177,6 +180,7 @@ def initialize_bot_and_dial(dialogues, dial_id):
 
 
 def my_chatbot(user_input, history):
+    global no_long_term_memory
     history = history or []
 
     user_input = user_input.strip()
@@ -213,8 +217,15 @@ def my_chatbot(user_input, history):
         concat_input = get_first_prompt(user_input, args.model_name)
     else:
         retrieve = None
-        if cur_turn_index > 2:
+        if no_long_term_memory:
+            pass
+        elif cur_turn_index > 2:
             retrieve = bot.get_related_turn(user_input, args.similar_top_k)
+        else:
+            pass
+        
+        logger.info(f"no_long_term_memory: {no_long_term_memory}")
+        logger.info(f"retrieve: \n{retrieve}\n")
         
         concat_input = get_concat_input(user_input, bot.get_turn_for_previous(), hist_str=retrieve)
     
@@ -246,6 +257,7 @@ if __name__ == '__main__':
     parser.add_argument("--model_name", type=str, default=ENGINE_DAVINCI_003, choices=model_choices)
     parser.add_argument("--logfile", type=str, default="./logs/load_dialogue_log.txt")
     parser.add_argument("--translation_file", type=str, default=None)
+    parser.add_argument("--no_long_term_memory", action='store_true', help='do not use long-term memory, default False')
     parser.add_argument("--similar_top_k", type=int, default=6)
     args = parser.parse_args()
 
@@ -282,6 +294,8 @@ if __name__ == '__main__':
         translation_map = load_json_file(args.translation_file)
     
     bot = ChatBot(model_name=args.model_name)
+    # whether use scm for history memory
+    no_long_term_memory = True if args.no_long_term_memory else False
 
     with gr.Blocks() as demo:
         gr.Markdown(f"<h1><center>Long Dialogue Chatbot ({args.model_name}) for test</center></h1>")
