@@ -16,6 +16,7 @@ bot: ChatBot = None
 
 # Global Hyper Parameters
 no_long_term_memory = False
+naive_memory = False
 
 translation_map = {}
 
@@ -181,6 +182,7 @@ def initialize_bot_and_dial(dialogues, dial_id):
 
 def my_chatbot(user_input, history):
     global no_long_term_memory
+    global naive_memory
     history = history or []
 
     user_input = user_input.strip()
@@ -220,7 +222,10 @@ def my_chatbot(user_input, history):
         if no_long_term_memory:
             pass
         elif cur_turn_index > 2:
-            retrieve = bot.get_related_turn(user_input, args.similar_top_k)
+            if naive_memory:
+                retrieve = bot.get_related_turn(user_input, k=args.similar_top_k, naive=True)
+            else:
+                retrieve = bot.get_related_turn(user_input, k=args.similar_top_k)
         else:
             pass
         
@@ -258,6 +263,7 @@ if __name__ == '__main__':
     parser.add_argument("--logfile", type=str, default="./logs/load_dialogue_log.txt")
     parser.add_argument("--translation_file", type=str, default=None)
     parser.add_argument("--no_long_term_memory", action='store_true', help='do not use long-term memory, default False')
+    parser.add_argument("--naive_memory", action='store_true', help='naive concat topk memory and concate history')
     parser.add_argument("--similar_top_k", type=int, default=6)
     args = parser.parse_args()
 
@@ -296,6 +302,7 @@ if __name__ == '__main__':
     bot = ChatBot(model_name=args.model_name)
     # whether use scm for history memory
     no_long_term_memory = True if args.no_long_term_memory else False
+    naive_memory = True if args.naive_memory else False
 
     with gr.Blocks() as demo:
         gr.Markdown(f"<h1><center>Long Dialogue Chatbot ({args.model_name}) for test</center></h1>")

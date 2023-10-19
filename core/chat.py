@@ -62,6 +62,8 @@ class ChatBot(object):
         self.embedding_func = MODEL_EMBEDDING_MAP[model_name]
         self.tokenize_func = get_tokenizer_func(self.model_name)
         self.history: list[Turn] = []
+        self.MAX_HISTORY_TOKENS = 2500
+        self.MAX_PRE_TURN_TOKENS = 500
 
     def clear_history(self):
         self.history = []
@@ -136,7 +138,7 @@ class ChatBot(object):
     
     def get_turn_for_previous(self):
         turn = self.history[-1]
-        if turn.content_tokens_length < 500:
+        if turn.content_tokens_length < self.MAX_PRE_TURN_TOKENS:
             return turn.user_sys_text
         else:
             return turn.summ
@@ -145,7 +147,7 @@ class ChatBot(object):
         total_tokens = sum(length_lst)
         pre_turn = self.history[-1]
         pre_turn_length = pre_turn.content_tokens_length
-        if pre_turn_length > 500:
+        if pre_turn_length > self.MAX_PRE_TURN_TOKENS:
             pre_turn_length = pre_turn.summary_tokens_length
 
         total_tokens += pre_turn_length
@@ -153,7 +155,7 @@ class ChatBot(object):
         if LOCAL_CHAT_LOGGER:
             LOCAL_CHAT_LOGGER.info(f"total_tokens: {total_tokens}")
         
-        if total_tokens > 2500:
+        if total_tokens > self.MAX_HISTORY_TOKENS:
             return True
         else:
             return False
@@ -181,8 +183,8 @@ class ChatBot(object):
         else:
             return 'raw'
     
-    
-    def get_related_turn(self, query, k=3):
+    def get_related_turn_naive(self, query, k=3):
+
         q_embedding = self.vectorize(query)
         # 只检索 [0, 上一轮)   上一轮的文本直接拼接进入对话，无需检索
         sim_lst = [
@@ -194,7 +196,65 @@ class ChatBot(object):
         arr = np.array(sim_lst)
 
         # get indices and values of the top k maximum values
+        # topk_indices 是无序的
+        topk_indices = arr.argsort()[-k:].tolist()
+        topk_values = arr[topk_indices].tolist()
+
+        turns = [self.history[t] for t in topk_indices]
+        index_value_turn_lst = [(idx, v, turn) for idx, v, turn in zip(topk_indices, topk_values, turns)]
+        sorted_index_value_turn_desc_lst = sorted(index_value_turn_lst, key=lambda x: x[1], reverse=True)
+
+        keep_idx_text_lst = []
+        cur_tokens = 0
+        # 先按照相似度从大到小保留，直到长度不够，就停止。
+        for p, (idx, score, turn) in enumerate(sorted_index_value_turn_desc_lst):
+            cur_text = turn.user_sys_text
+            turn_tokens = turn.content_tokens_length
+            if p == 0:
+                if turn_tokens > self.MAX_HISTORY_TOKENS:
+                    # truncate
+                    cur_text = cur_text[:(self.MAX_HISTORY_TOKENS - 500)]
+                    keep_idx_text_lst.append([idx, cur_text])
+                    break
+                else:
+                    cur_tokens = turn_tokens
+                    keep_idx_text_lst.append([idx, cur_text])
+            else:
+                move_tokens = cur_tokens + turn_tokens
+                if move_tokens < self.MAX_HISTORY_TOKENS:
+                    cur_tokens = move_tokens
+                    keep_idx_text_lst.append([idx, cur_text])
+                else:
+                    break
+
+        sorted_index_text_asc_lst = sorted(keep_idx_text_lst, key=lambda x: x[0])
+        # 然后再按照 idx 的先后顺序拼接
+        retrieve_history_text = ''
+        for idx, text in sorted_index_text_asc_lst:
+            retrieve_history_text += f'{text}\n\n'
+        return retrieve_history_text
+
+
+    def get_related_turn(self, query, k=3, naive=False):
+        # for ablation, naive choose full content and truncate text 
+        if naive:
+            ans = self.get_related_turn_naive(query, k)
+            return ans
+        
+        q_embedding = self.vectorize(query)
+        # 只检索 [0, 上一轮)   上一轮的文本直接拼接进入对话，无需检索
+        sim_lst = [
+            self._similarity(q_embedding, v.embedding)
+            for v in self.history[:-1]
+        ]
+
+        # convert to numpy array
+        arr = np.array(sim_lst)
+
+        # get indices and values of the top k maximum values
+        # topk_indices 是无序的
         topk_indices = arr.argsort()[-k:]
+
         topk_values = arr[topk_indices]
 
         topk_indices = topk_indices.tolist()
@@ -206,6 +266,8 @@ class ChatBot(object):
         shorten_history = self._is_concat_history_too_long(length_lst)
 
         first_round = True
+
+        # 判断是否保留 memory , 判断 使用 summary / full_content
         
         while shorten_history:
             # 开始用模型来判断是否精简, 如果是，修改 use_summary_map[key] = True
