@@ -1,4 +1,5 @@
-import os
+from env import *
+# import os
 import re
 import sys
 import argparse
@@ -13,10 +14,16 @@ from prompts.dialogue import *
 args: argparse.Namespace = None
 bot: ChatBot = None
 
+# Global Hyper Parameters
+no_long_term_memory = False
+naive_memory = False
+embed_summary = False
+
 translation_map = {}
 
 
 def summarize_embed_one_turn(bot: ChatBot, dialogue_text, dialogue_text_with_index):
+    global embed_summary
     lang2template = {
         LANG_EN: en_turn_summarization_prompt,
         LANG_ZH: zh_turn_summarization_prompt
@@ -33,7 +40,10 @@ def summarize_embed_one_turn(bot: ChatBot, dialogue_text, dialogue_text_with_ind
         logger.info(f'Summarization is:\n\n{summarization}\n\n')
     else:
         logger.info(f'Raw content is short, keep raw content as summarization:\n\n{summarization}\n\n')
-    embedding = bot.vectorize(dialogue_text_with_index)
+    if embed_summary:
+        embedding = bot.vectorize(summarization)
+    else:
+        embedding = bot.vectorize(dialogue_text_with_index)
     return summarization, embedding
 
 
@@ -176,6 +186,8 @@ def initialize_bot_and_dial(dialogues, dial_id):
 
 
 def my_chatbot(user_input, history):
+    global no_long_term_memory
+    global naive_memory
     history = history or []
 
     user_input = user_input.strip()
@@ -212,8 +224,18 @@ def my_chatbot(user_input, history):
         concat_input = get_first_prompt(user_input, args.model_name)
     else:
         retrieve = None
-        if cur_turn_index > 2:
-            retrieve = bot.get_related_turn(user_input, args.similar_top_k)
+        if no_long_term_memory:
+            pass
+        elif cur_turn_index > 2:
+            if naive_memory:
+                retrieve = bot.get_related_turn(user_input, k=args.similar_top_k, naive=True)
+            else:
+                retrieve = bot.get_related_turn(user_input, k=args.similar_top_k)
+        else:
+            pass
+        
+        logger.info(f"no_long_term_memory: {no_long_term_memory}")
+        logger.info(f"retrieve: \n{retrieve}\n")
         
         concat_input = get_concat_input(user_input, bot.get_turn_for_previous(), hist_str=retrieve)
     
@@ -245,6 +267,10 @@ if __name__ == '__main__':
     parser.add_argument("--model_name", type=str, default=ENGINE_DAVINCI_003, choices=model_choices)
     parser.add_argument("--logfile", type=str, default="./logs/load_dialogue_log.txt")
     parser.add_argument("--translation_file", type=str, default=None)
+    parser.add_argument("--no_long_term_memory", action='store_true', help='do not use long-term memory, default False')
+    parser.add_argument("--naive_memory", action='store_true', help='naive concat topk memory and concate history')
+    parser.add_argument("--embed_summary", action='store_true', help='use summary embedding for each turn')
+    # embed_summary
     parser.add_argument("--similar_top_k", type=int, default=6)
     args = parser.parse_args()
 
@@ -281,6 +307,10 @@ if __name__ == '__main__':
         translation_map = load_json_file(args.translation_file)
     
     bot = ChatBot(model_name=args.model_name)
+    # whether use scm for history memory
+    no_long_term_memory = True if args.no_long_term_memory else False
+    naive_memory = True if args.naive_memory else False
+    embed_summary = True if args.embed_summary else False
 
     with gr.Blocks() as demo:
         gr.Markdown(f"<h1><center>Long Dialogue Chatbot ({args.model_name}) for test</center></h1>")

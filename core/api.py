@@ -74,7 +74,9 @@ def log_openai_result(func):
     global text_cache
 
     def wrapper(*args, **kwargs):
-        prompt = args[0] if args else None
+        prompt: str = args[0] if args else None
+
+        prompt_part = ' '.join(prompt.split('\n'))[:20]
         
         # print(f"prompt: {prompt}")
         # print(f"response: {response}")
@@ -83,10 +85,10 @@ def log_openai_result(func):
 
         key = f"{func_name}_{prompt}"
         if key in embedding_cache:
-            print(f'hit embedding cache: {prompt[:20]} .. ')
+            print(f'hit embedding cache: {prompt_part} ... ')
             return embedding_cache[key]
         elif key in text_cache:
-            print(f'hit text cache: {prompt[:20]} .. ')
+            print(f'hit text cache: {prompt_part} ... ')
             return text_cache[key]
 
         response = func(*args, **kwargs)
@@ -201,7 +203,7 @@ def call_text_davinci_003(prompt, apikey=None, verbo=True):
 
     api_model_index = ENGINE_DAVINCI_003
     response = openai.Completion.create(
-            engine=ENGINE_DAVINCI_003,
+            model=ENGINE_DAVINCI_003,
             prompt=prompt,
             temperature=0.5,
             max_tokens=max_tokens,
