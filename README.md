@@ -6,6 +6,7 @@ Our SCM system is composed of three key modules: the language model agent, the m
 <img src="misc/workflow.png" align="middle" width="95%">
 
 # 🔥 Updates
+- [**2023-12-14**] Newest version of the paper is released. Check it out in [SCM_Paper_Draft.pdf](./SCM_Paper_Draft.pdf)!
 - [**2023-4-26**] We released our first version [paper](https://arxiv.org/abs/2304.13343), [codes](https://github.com/wbbeyourself/SCM4LLMs). Check it out!
 
 # 🌟 Overview
