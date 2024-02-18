@@ -1,12 +1,12 @@
-# Unleashing Infinite-Length Input Capacity for Large-scale Language Models with Self-Controlled Memory System
+# Enhancing Large Language Model with Self-Controlled Memory Framework
 
-This is the official repository for the paper ["Unleashing Infinite-Length Input Capacity for Large-scale Language Models with Self-Controlled Memory System"](https://arxiv.org/abs/2304.13343). In this paper, we introduce the **Self-Controlled Memory (SCM)** system to unleash infinite-length input capacity for large-scale language models.
+This is the official repository for the paper ["Enhancing Large Language Model with Self-Controlled Memory Framework"](https://arxiv.org/abs/2304.13343). In this paper, we introduce the **Self-Controlled Memory (SCM)** system to unleash infinite-length input capacity for large-scale language models.
 Our SCM system is composed of three key modules: the language model agent, the memory stream, and the memory controller. 
 
 <img src="misc/workflow.png" align="middle" width="95%">
 
 # 🔥 Updates
-- [**2023-12-14**] Newest version of the paper is released. Check it out in [SCM_Paper_Draft.pdf](./SCM_Paper_Draft.pdf)!
+- [**2024-02-18**] Newest version of the paper is released. We update the paper with more details and experiments.
 - [**2023-4-26**] We released our first version [paper](https://arxiv.org/abs/2304.13343), [codes](https://github.com/wbbeyourself/SCM4LLMs). Check it out!
 
 # 🌟 Overview
@@ -125,8 +125,8 @@ More running records and summary details are zipped to `history.zip`. You can do
 If you find our work is helpful, please cite as:
 ```
 @article{liang2023unleashing,
-      title={Unleashing Infinite-Length Input Capacity for Large-scale Language Models with Self-Controlled Memory System}, 
-      author={Xinnian Liang and Bing Wang and Hui Huang and Shuangzhi Wu and Peihao Wu and Lu Lu and Zejun Ma and Zhoujun Li},
+      title={Enhancing Large Language Model with Self-Controlled Memory Framework}, 
+      author={Bing Wang, Xinnian Liang, Jian Yang, Hui Huang, Shuangzhi Wu, Peihao Wu, Lu Lu, Zejun Ma, Zhoujun Li},
       year={2023},
       eprint={2304.13343}
 }
