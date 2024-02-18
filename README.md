@@ -105,8 +105,8 @@ Evaluation dataset statistics. 2M means 2 miillion token count.
 - [Book Summarization results](results/markdown_results/book_summary.md)
 - [Meeting Summarization Results](results/markdown_results/meeting_summary_zh.md)
 
-More running records and summary details are zipped to `history.zip`. You can download it from [Google Drive Link](https://drive.google.com/file/d/1iPsZnClj170W5vZyrFADoVZoXICb1ELo/view?usp=sharing) and [Baidu Netdisk](https://pan.baidu.com/s/1TPdTP7LBJZAopxckyIfb8A?pwd=yqwa).
-`call_embedding_history.json` and `call_func_history.json` store the openai cache log and are zipped in `logs.zip`. You can download it from [Google Drive Link](https://drive.google.com/file/d/17Tx294kixfgFfAkB0Z98q1M_aT5OOZEU/view?usp=sharing) and [Baidu Netdisk](https://pan.baidu.com/s/1yo2p_m-aRbTd5hIyNTlL4Q?pwd=ka6j).
+More running records and summary details are zipped to `history.zip`. You can download it from [Google Drive Link](https://drive.google.com/) and [Baidu Netdisk](https://pan.baidu.com/).
+`call_embedding_history.json` and `call_func_history.json` store the openai cache log and are zipped in `logs.zip`. You can download it from [Google Drive Link](https://drive.google.com/) and [Baidu Netdisk](https://pan.baidu.com/).
 
 # ⚠️ Limitations & Risks
 
