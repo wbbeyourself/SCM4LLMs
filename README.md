@@ -124,11 +124,13 @@ More running records and summary details are zipped to `history.zip`. You can do
 
 If you find our work is helpful, please cite as:
 ```
-@article{liang2023unleashing,
+@misc{wang2024enhancing,
       title={Enhancing Large Language Model with Self-Controlled Memory Framework}, 
-      author={Bing Wang, Xinnian Liang, Jian Yang, Hui Huang, Shuangzhi Wu, Peihao Wu, Lu Lu, Zejun Ma, Zhoujun Li},
-      year={2023},
-      eprint={2304.13343}
+      author={Bing Wang and Xinnian Liang and Jian Yang and Hui Huang and Shuangzhi Wu and Peihao Wu and Lu Lu and Zejun Ma and Zhoujun Li},
+      year={2024},
+      eprint={2304.13343},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
 }
 ```
 
